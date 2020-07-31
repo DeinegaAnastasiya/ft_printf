@@ -2,7 +2,7 @@ LIBFT = libft
 
 NAME = ft_printf
 
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -g -Wall -Wextra -Werror
 
 LFLAGS = -L $(LIBFT) -lft
 
