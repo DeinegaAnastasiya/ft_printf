@@ -6,7 +6,7 @@
 /*   By: poatmeal <poatmeal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/04 10:35:52 by poatmeal          #+#    #+#             */
-/*   Updated: 2020/08/04 11:54:52 by poatmeal         ###   ########.fr       */
+/*   Updated: 2020/08/04 16:33:47 by poatmeal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,23 +62,23 @@ void		plus_number_5(t_buf *buf, int nul, int j)
 	}
 }
 
-int			fill_to_5(t_buf *buf, long long int *coef, long long int *x)
+int			fill_to_5(t_buf *buf, long long int coef, long long int x)
 {
 	int					y;
 
 	y = 0;
-	while (buf->pow_5[BIG_BUFF - (++y)] != -1 || *coef > 0)
+	while (buf->pow_5[BIG_BUFF - (++y)] != -1 || coef > 0)
 	{
 		if (buf->pow_5[BIG_BUFF - y] != -1)
 		{
-			*x = buf->pow_5[BIG_BUFF - y] * 5 + *coef;
-			buf->pow_5[BIG_BUFF - y] = *x % 10;
-			*coef = *x / 10;
+			x = buf->pow_5[BIG_BUFF - y] * 5 + coef;
+			buf->pow_5[BIG_BUFF - y] = x % 10;
+			coef = x / 10;
 		}
 		else
 		{
-			buf->pow_5[BIG_BUFF - y] = *coef;
-			*coef = *coef / 10;
+			buf->pow_5[BIG_BUFF - y] = coef;
+			coef = coef / 10;
 		}
 	}
 	return (y);
@@ -96,9 +96,9 @@ void		take_to_5(t_buf *buf, int pow, int nul)
 		x = buf->pow_5[BIG_BUFF] * 5;
 		buf->pow_5[BIG_BUFF] = x % 10;
 		coef = x / 10;
-		y = fill_to_5(buf, &coef, &x);
+		y = fill_to_5(buf, coef, x);
 		pow--;
 	}
 	plus_number_5(buf, nul, y);
-	ft_memset(buf->pow_5, -1, BIG_BUFF + 1);
+	ft_memset(buf->pow_5, -1, BIG_BUFF);
 }
