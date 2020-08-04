@@ -6,7 +6,7 @@
 /*   By: poatmeal <poatmeal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/10 15:01:00 by poatmeal          #+#    #+#             */
-/*   Updated: 2020/08/04 17:25:50 by poatmeal         ###   ########.fr       */
+/*   Updated: 2020/08/04 18:01:12 by poatmeal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int			mem_alloc(t_buf *buf)
 		free (buf->wh_num);
 		return (0);
 	}
-	printf("%p\n", buf->div_num);
+	printf("0)%p\n", buf->div_num);
 	ft_memset(buf->div_num, -1, BIG_BUFF);
 	if (!(buf->pow_2 = (char *)ft_memalloc(sizeof(char) * BIG_BUFF + 1)))
 	{
@@ -72,10 +72,10 @@ void			print(t_buf *buf, int sign)
 
 void			free_print(t_buf *buf)
 {
-	printf("%p\n", buf->div_num);
+	printf("4)%p\n", buf->div_num);
 	ft_putchar(buf->div_num[0] + 48);
 	ft_putchar('\n');
-	printf("%p\n", buf->div_num);
+	printf("5)%p\n", buf->div_num);
 	// ft_memset(buf->div_num, -1, BIG_BUFF);
 	free(buf->div_num);
 	// free(buf->wh_num);
@@ -93,7 +93,7 @@ void			conversion(t_mask bits, t_buf *buf)
 
 	i = 0;
 	sign = 1;
-	printf("%p\n", buf->div_num);
+	printf("1)%p\n", buf->div_num);
 	if (bits.bits.s == 1)
 		sign = -sign;
 	e = bits.bits.e - 16383;
@@ -108,11 +108,9 @@ void			conversion(t_mask bits, t_buf *buf)
 		}
 		i++;
 	}
-	
-	printf("%p\n", buf->div_num);
-	// free(buf->div_num);
+	printf("2)%p\n", buf->div_num);
 	print(buf, sign);
-	printf("%p\n", buf->div_num);
+	printf("3)%p\n", buf->div_num);
 	
 }
 
