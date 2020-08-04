@@ -6,7 +6,7 @@
 /*   By: poatmeal <poatmeal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/14 14:02:58 by poatmeal          #+#    #+#             */
-/*   Updated: 2020/07/30 15:14:30 by poatmeal         ###   ########.fr       */
+/*   Updated: 2020/08/04 10:40:53 by poatmeal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ typedef union				u_mask
 	long double				num;
 }							t_mask;
 
-typedef	struct 				s_buf
+typedef	struct				s_buf
 {
 	char					*wh_num;
 	char					*div_num;
@@ -39,5 +39,8 @@ typedef	struct 				s_buf
 	char					*pow_5;
 }							t_buf;
 
+void						print_f(long double num);
+void						take_to_2(t_buf *buf, int pw);
+void						take_to_5(t_buf *buf, int pow, int nul);
 
 #endif

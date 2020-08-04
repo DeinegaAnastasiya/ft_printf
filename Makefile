@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: poatmeal <poatmeal@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2020/08/04 11:09:22 by poatmeal          #+#    #+#              #
+#    Updated: 2020/08/04 11:09:35 by poatmeal         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 LIBFT = libft
 
 NAME = ft_printf
@@ -6,7 +18,7 @@ FLAGS = -g -Wall -Wextra -Werror
 
 LFLAGS = -L $(LIBFT) -lft
 
-FILES = ./my_printf.c
+FILES = ./print_f.c ./main.c ./pow_2.c ./pow_5.c
 
 OBJS = $(FILES:%.c=%.o)
 

@@ -6,7 +6,7 @@
 /*   By: poatmeal <poatmeal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/10 15:31:09 by poatmeal          #+#    #+#             */
-/*   Updated: 2020/07/17 14:15:35 by poatmeal         ###   ########.fr       */
+/*   Updated: 2020/08/04 10:44:22 by poatmeal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,5 @@ int					*ft_range(int min, int max);
 void				*ft_freememmass(char **memmass);
 int					get_next_line(const int fd, char **line);
 int					ft_atoi_16(const char *str);
-
 
 #endif
