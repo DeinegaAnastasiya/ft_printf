@@ -6,7 +6,7 @@
 #    By: poatmeal <poatmeal@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/08/04 11:09:22 by poatmeal          #+#    #+#              #
-#    Updated: 2020/08/04 11:09:35 by poatmeal         ###   ########.fr        #
+#    Updated: 2020/08/06 10:17:00 by poatmeal         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ FLAGS = -g -Wall -Wextra -Werror
 
 LFLAGS = -L $(LIBFT) -lft
 
-FILES = ./print_f.c ./main.c ./pow_2.c ./pow_5.c
+FILES = ./parse_f.c ./main.c ./pow_2.c ./pow_5.c ./init_f.c ./mem_alloc.c ./print_f.c
 
 OBJS = $(FILES:%.c=%.o)
 

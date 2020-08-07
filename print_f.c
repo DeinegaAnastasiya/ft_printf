@@ -5,127 +5,250 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: poatmeal <poatmeal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/07/10 15:01:00 by poatmeal          #+#    #+#             */
-/*   Updated: 2020/08/04 18:01:12 by poatmeal         ###   ########.fr       */
+/*   Created: 2020/08/06 10:10:36 by poatmeal          #+#    #+#             */
+/*   Updated: 2020/08/07 21:35:31 by poatmeal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/ft_printf.h"
-#include <stdio.h>
 
-int			mem_alloc(t_buf *buf)
-{
-	if (!(buf->wh_num = (char *)ft_memalloc(sizeof(char) * BIG_BUFF + 1)))
-		return (0);
-	ft_memset(buf->wh_num, -1, BIG_BUFF);
-	if (!(buf->div_num = (char *)ft_memalloc(sizeof(char) * BIG_BUFF + 1)))
-	{
-		free (buf->wh_num);
-		return (0);
-	}
-	printf("0)%p\n", buf->div_num);
-	ft_memset(buf->div_num, -1, BIG_BUFF);
-	if (!(buf->pow_2 = (char *)ft_memalloc(sizeof(char) * BIG_BUFF + 1)))
-	{
-		free(buf->wh_num);
-		free(buf->div_num);
-		return (0);
-	}
-	ft_memset(buf->pow_2, -1, BIG_BUFF);
-	if (!(buf->pow_5 = (char *)ft_memalloc(sizeof(char) * BIG_BUFF + 1)))
-	{
-		free(buf->wh_num);
-		free(buf->div_num);
-		free(buf->pow_5);
-		return (0);
-	}
-	ft_memset(buf->pow_5, -1, BIG_BUFF);
-	return (1);
-}
-
-void			print(t_buf *buf, int sign)
+void			print(t_buf *buf, t_print *get)
 {
 	int					i;
 
 	i = 0;
-	if (sign == -1)
+	if (get->sign == -1)
+	{
 		ft_putchar('-');
+		get->out_ch++;
+	}
 	while (buf->wh_num[i] == -1)
 		i++;
 	while (i < BIG_BUFF + 1)
 	{
 		ft_putchar(buf->wh_num[i] + 48);
+		get->out_ch++;
 		i++;
 	}
-	ft_putchar('.');
-	i = 0;
-	if (buf->div_num[i] == -1)
-		ft_putchar('0');
-	while (buf->div_num[i] != -1 && i < BIG_BUFF + 1)
+	if (get->prec != 0)
 	{
-		ft_putchar(buf->div_num[i] + 48);
-		i++;
-	}
-	ft_putchar('\n');
-	
-}
-
-void			free_print(t_buf *buf)
-{
-	printf("4)%p\n", buf->div_num);
-	ft_putchar(buf->div_num[0] + 48);
-	ft_putchar('\n');
-	printf("5)%p\n", buf->div_num);
-	// ft_memset(buf->div_num, -1, BIG_BUFF);
-	free(buf->div_num);
-	// free(buf->wh_num);
-	// free(buf->pow_2);
-	// free(buf->pow_5);
-	// free(buf);
-	buf = NULL;
-}
-
-void			conversion(t_mask bits, t_buf *buf)
-{
-	int					e;
-	int					i;
-	int					sign;
-
-	i = 0;
-	sign = 1;
-	printf("1)%p\n", buf->div_num);
-	if (bits.bits.s == 1)
-		sign = -sign;
-	e = bits.bits.e - 16383;
-	while (i < 64)
-	{
-		if ((bits.bits.m >> (63 - i)) & 1)
+		ft_putchar('.');
+		get->out_ch++;
+		i = 0;
+		if (buf->div_num[i] == -1)
 		{
-			if (e - i >= 0)
-				take_to_2(buf, e - i);
-			else if (e - i < 0)
-				take_to_5(buf, -(e - i), -(e - i));
+			ft_putchar('0');
+			get->out_ch++;
 		}
+		while (buf->div_num[i] != -1 && i < BIG_BUFF + 1 && i < get->prec)
+		{
+			ft_putchar(buf->div_num[i] + 48);
+			i++;
+		}
+		get->out_ch += i;
+	}
+	if (get->prec == 0 && get->oct == 1)
+	{
+		ft_putchar('.');
+		get->out_ch++;
+	}
+}
+
+void			change_whole(t_buf *buf)
+{
+	int		j;
+
+	j = 0;
+	if (buf->wh_num[BIG_BUFF] + 1 > 9)
+	{
+		while (buf->wh_num[BIG_BUFF - j] + 1 > 9)
+		{
+			buf->wh_num[BIG_BUFF - j] = 0;
+			j++;
+		}
+	}
+	if (buf->wh_num[BIG_BUFF - j] == -1)
+		buf->wh_num[BIG_BUFF - j] = 1;
+	else
+		buf->wh_num[BIG_BUFF - j] = buf->wh_num[BIG_BUFF - j] + 1;
+}
+
+void			change_div(t_buf *buf, int i)
+{
+	if (buf->div_num[i] + 1 > 9)
+	{
+		while (i >= 0 && buf->div_num[i] + 1 > 9)
+		{
+			buf->div_num[i] = 0;
+			i--;
+		}
+	}
+	if (i < 0)
+		change_whole(buf);
+	else
+		buf->div_num[i] = buf->div_num[i] + 1;
+}
+
+void			check_round(t_buf *buf, int i)
+{
+	while (i < BIG_BUFF && buf->div_num[i] == 0)
+		i++;
+	if (i < BIG_BUFF && buf->div_num[i] != -1)
+		change_whole(buf);
+}
+
+void			check_round_div(t_buf *buf, int i)
+{
+	int j;
+	
+	j = i;
+	while (i < BIG_BUFF && buf->div_num[i] == 0)
+		i++;
+	if (i < BIG_BUFF && buf->div_num[i] != -1)
+		change_div(buf, j - 2);
+}
+
+void			ft_round(t_buf *buf, t_print *get)
+{
+	int i;
+	int j;
+
+	j = 0;
+	i = get->prec;
+	if (i == 0)
+	{
+		if (buf->div_num[i] > 5)
+			change_whole(buf);
+		else if (buf->div_num[i] == 5 && buf->div_num[i + 1] == -1)
+		{
+			if (buf->wh_num[BIG_BUFF] % 2 != 0)
+				change_whole(buf);
+		}
+		else if (buf->div_num[i] == 5 && buf->div_num[i + 1] != -1)
+			check_round(buf, i + 1);
+	}
+	else
+	{
+		if (buf->div_num[i] > 5)
+			change_div(buf, i - 1);
+		else if (buf->div_num[i] == 5 && buf->div_num[i + 1] == -1)
+		{
+			if (buf->div_num[i - 1] % 2 != 0)
+				change_div(buf, i - 1);
+		}
+		else if (buf->div_num[i] == 5 && buf->div_num[i + 1] != -1)
+			check_round_div(buf, i + 1);
+	}
+}
+
+int			fill_plus(t_buf *buf, t_print *get, int i)
+{
+	if (get->sign < 0)
+	{
+		buf->wh_num[BIG_BUFF - i] = -3;
 		i++;
 	}
-	printf("2)%p\n", buf->div_num);
-	print(buf, sign);
-	printf("3)%p\n", buf->div_num);
-	
+	else if (get->plus == 1 && get->sign > 0)
+	{
+		buf->wh_num[BIG_BUFF - i] = -5;
+		i++;
+	}
+	return (i);
 }
 
-void			print_f(long double num)
+void			fill_width(t_buf *buf, t_print *get)
 {
-	t_mask				bit_num;
-	t_buf				*buf;
+	int n;
+	int i;
+	char val;
 
-	buf = (t_buf *)ft_memalloc(sizeof(t_buf));
-	if (mem_alloc(buf))
+	i = 0;
+	n = get->width - get->prec - 1;
+	if (get->plus == 0 && get->space == 1 && get->sign > 0 && i < n)
+		n = get->width - get->prec - 2;
+	val = -16;
+	if (get->width_zero == 1)
+		val = 0;
+	while (buf->wh_num[BIG_BUFF - i] != -1)
+		i++;
+	i = fill_plus(buf, get, i);
+	while (i < n)
 	{
-		bit_num.num = num;
-		// printf("%p\n", buf->div_num);
-		conversion(bit_num, buf);
-		// printf("%p\n", buf->div_num);
-		free_print(buf);
+		buf->wh_num[BIG_BUFF - i] = val;
+		i++;
+	}
+	if (get->plus == 0 && get->space == 1 && get->sign > 0)
+	{
+		buf->wh_num[BIG_BUFF - i] = -16;
+		i++;
 	}
 }
+
+void			check_plus_space(t_print *get)
+{
+	if (get->plus == 1 && get->sign < 0)
+	{
+		ft_putchar('-');
+		get->out_ch++;
+	}
+	else if (get->plus == 1 && get->sign > 0)
+	{
+		ft_putchar('+');
+		get->out_ch++;
+	}
+	else if (get->plus == 0 && get->space == 1 && get->sign > 0)
+	{
+		ft_putchar(' ');
+		get->out_ch++;
+	}
+}
+
+void			print_align(t_buf *buf, t_print *get)
+{
+	int n;
+	int i;
+
+	i = 0;
+	n = get->width - get->prec - 1;
+	while (buf->wh_num[BIG_BUFF - i] != -1)
+		i++;
+	if (i < n)
+	{
+		check_plus_space(get);
+		print(buf, get);
+		while (i < n)
+		{
+			ft_putchar(' ');
+			get->out_ch++;
+			i++;
+		}
+	}
+}
+
+void				print_f(t_buf *buf, t_print *get)
+{
+	if (get->prec >= 0)
+		ft_round(buf, get);
+	if (get->align == 1)
+	{
+		print_align(buf, get);
+		return ;
+	}
+	if (get->width > 0)
+		fill_width(buf, get);
+	else if (get->plus == 1)
+	{
+		if (get->sign > 0)
+		{
+			ft_putchar('+');
+			get->out_ch++;
+		}
+	}
+	else if (get->plus == 0 && get->space == 1 && get->sign > 0)
+	{
+		ft_putchar(' ');
+		get->out_ch++;
+	}
+	print(buf, get);
+}
+

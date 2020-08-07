@@ -6,7 +6,7 @@
 /*   By: poatmeal <poatmeal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/04 10:35:52 by poatmeal          #+#    #+#             */
-/*   Updated: 2020/08/04 18:17:15 by poatmeal         ###   ########.fr       */
+/*   Updated: 2020/08/05 11:35:32 by poatmeal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void		plus_number_5(t_buf *buf, int nul, int j)
 	j = j + count_nul(buf, nul) - 1;
 	i = 0;
 	nul = 0;
-	while (j > 0 || buf->pow_5[BIG_BUFF - i] != -1)
+	while (j >= 0)
 	{
 		if (buf->div_num[j] == -1)
 			x = buf->pow_5[BIG_BUFF - i];
@@ -91,6 +91,8 @@ void		take_to_5(t_buf *buf, int pow, int nul)
 	long long int		coef;
 
 	buf->pow_5[BIG_BUFF] = 5;
+	if (pow == 1)
+		y = 1;
 	while (pow > 1)
 	{
 		x = buf->pow_5[BIG_BUFF] * 5;
