@@ -6,7 +6,7 @@
 /*   By: poatmeal <poatmeal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/04 10:35:00 by poatmeal          #+#    #+#             */
-/*   Updated: 2020/08/05 12:23:26 by poatmeal         ###   ########.fr       */
+/*   Updated: 2020/08/08 14:21:29 by poatmeal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,15 @@ void		plus_number_2(t_buf *buf)
 
 	i = 0;
 	coef = 0;
-	while (buf->wh_num[BIG_BUFF - i] != -1 || buf->pow_2[BIG_BUFF - i] != -1 || coef > 0)
+	while (buf->wh_num[BIG_BUFF - i] != -1 ||
+	buf->pow_2[BIG_BUFF - i] != -1 || coef > 0)
 	{
 		if (buf->wh_num[BIG_BUFF - i] == -1 && buf->pow_2[BIG_BUFF - i] == -1)
 			x = 0;
 		else if (buf->wh_num[BIG_BUFF - i] == -1)
 			x = buf->pow_2[BIG_BUFF - i];
 		else if (buf->pow_2[BIG_BUFF - i] == -1)
-			x = buf->wh_num[BIG_BUFF - i]; 
+			x = buf->wh_num[BIG_BUFF - i];
 		else
 			x = buf->wh_num[BIG_BUFF - i] + buf->pow_2[BIG_BUFF - i];
 		buf->wh_num[BIG_BUFF - i] = (x + coef) % 10;

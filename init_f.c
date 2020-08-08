@@ -6,7 +6,7 @@
 /*   By: poatmeal <poatmeal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/06 10:13:46 by poatmeal          #+#    #+#             */
-/*   Updated: 2020/08/07 20:27:39 by poatmeal         ###   ########.fr       */
+/*   Updated: 2020/08/08 15:01:19 by poatmeal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void			is_this_number(t_mask bits)
 	}
 }
 
-void			conversion(t_mask bits, t_buf *buf, t_print *get)
+void			conversion(t_mask bits, t_buf *buf, t_printf *get)
 {
 	int					e;
 	int					i;
@@ -50,18 +50,17 @@ void			conversion(t_mask bits, t_buf *buf, t_print *get)
 	}
 }
 
-void		init_f(double num, t_print *get)
+void			init_f(t_printf *get)
 {
 	t_mask				bit_num;
 	t_buf				buf;
 
 	if (mem_alloc(&buf))
 	{
-		/*if (get->L_l == 2)
-			bit_num.num =  (long double)va_arg(get->val, long double);
+		if (ft_strcmp(get->modln, "L"))
+			bit_num.num =  (long double)va_arg(get->avs, long double);
 		else
-			bit_num.num = (double)va_arg(get->val, double);*/
-		bit_num.num = num;
+			bit_num.num = (double)va_arg(get->avs, double);
 		conversion(bit_num, &buf, get);
 		print_f(&buf, get);
 		free_buf(&buf);
