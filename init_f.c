@@ -6,34 +6,20 @@
 /*   By: poatmeal <poatmeal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/06 10:13:46 by poatmeal          #+#    #+#             */
-/*   Updated: 2020/08/08 15:01:19 by poatmeal         ###   ########.fr       */
+/*   Updated: 2020/08/09 17:53:08 by poatmeal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/ft_printf.h"
+#include "ft_printf.h"
 
-void			is_this_number(t_mask bits)
-{
-	if (bits.bits.e == 32767)
-	{
-		if (bits.bits.m == 0x8000000000000000 && bits.bits.s == 0)
-			write(1, "inf", 3);
-		else if (bits.bits.m == 0x8000000000000000 && bits.bits.s == 1)
-			write(1, "-inf", 4);
-		else
-			write(1, "nan", 3);
-		ft_putchar('\n');
-		exit(0);
-	}
-}
-
-void			conversion(t_mask bits, t_buf *buf, t_printf *get)
+int				conversion(t_mask bits, t_buf *buf, t_printf *get)
 {
 	int					e;
 	int					i;
 
 	i = 0;
-	is_this_number(bits);
+	if (is_this_number(bits, get))
+		return (0);
 	if (bits.bits.s == 1)
 		get->sign = -1;
 	e = bits.bits.e - 16383;
@@ -48,6 +34,7 @@ void			conversion(t_mask bits, t_buf *buf, t_printf *get)
 		}
 		i++;
 	}
+	return (1);
 }
 
 void			init_f(t_printf *get)
@@ -57,11 +44,12 @@ void			init_f(t_printf *get)
 
 	if (mem_alloc(&buf))
 	{
-		if (ft_strcmp(get->modln, "L"))
-			bit_num.num =  (long double)va_arg(get->avs, long double);
+		if (get->lfloat == 1)
+			bit_num.num = (long double)va_arg(get->avs, long double);
 		else
 			bit_num.num = (double)va_arg(get->avs, double);
-		conversion(bit_num, &buf, get);
+		if (!conversion(bit_num, &buf, get))
+			return ;
 		print_f(&buf, get);
 		free_buf(&buf);
 	}

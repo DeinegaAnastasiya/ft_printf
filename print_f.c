@@ -6,7 +6,7 @@
 /*   By: poatmeal <poatmeal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/06 10:10:36 by poatmeal          #+#    #+#             */
-/*   Updated: 2020/08/09 15:44:18 by poatmeal         ###   ########.fr       */
+/*   Updated: 2020/08/09 18:16:06 by poatmeal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,10 @@ void			print(t_buf *buf, t_printf *get)
 	}
 }
 
-void			print_align(t_buf *buf, t_printf *get, int k)
+void			print_align(t_buf *buf, t_printf *get, int k, int i)
 {
 	int n;
-	int i;
 
-	i = 0;
 	n = get->width - get->f_prec;
 	if (get->f_prec != 0 || (get->f_prec == 0 && get->fh))
 		n--;
@@ -98,7 +96,7 @@ void			print_f(t_buf *buf, t_printf *get)
 		ft_round(buf, get);
 	if (get->fm)
 	{
-		print_align(buf, get, k);
+		print_align(buf, get, k, 0);
 		return ;
 	}
 	if (get->width > 0)
@@ -109,12 +107,10 @@ void			print_f(t_buf *buf, t_printf *get)
 		get->len++;
 	}
 	if ((get->fp && get->width <= 0) || (get->fp && get->fz))
-	{
 		if (get->sign > 0)
 		{
 			ft_putchar('+');
 			get->len++;
 		}
-	}
 	print(buf, get);
 }
